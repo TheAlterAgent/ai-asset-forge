@@ -156,7 +156,8 @@ game-asset-pipeline/
 │   ├── minimax.json.example     # template (committed)
 │   └── minimax.json             # YOUR keys (gitignored)
 ├── prompts/
-│   ├── resource-planner.md      # M3 system prompt
+│   ├── resource-planner.md      # M3 system prompt (Chinese, default)
+│   ├── resource-planner.en.md   # M3 system prompt (English)
 │   └── modality-prompts/        # future: per-modality prompts
 ├── scripts/
 │   ├── doctor.py

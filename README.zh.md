@@ -154,7 +154,8 @@ game-asset-pipeline/
 │   ├── minimax.json.example     # 模板（提交进 git）
 │   └── minimax.json             # 你的真 key（gitignore 掉）
 ├── prompts/
-│   ├── resource-planner.md      # M3 系统 prompt
+│   ├── resource-planner.md      # M3 系统 prompt（中文，默认）
+│   ├── resource-planner.en.md   # M3 系统 prompt（英文）
 │   └── modality-prompts/        # 预留：各模态 prompt
 ├── scripts/
 │   ├── doctor.py
