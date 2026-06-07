@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Distribution
+build/
+dist/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Secrets & config - NEVER commit API keys
+config/minimax.json
+*.env
+.env
+.env.*
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Generated assets - users generate their own
+assets/projects/
+assets/index.json
+design_input.md
+test_trim.mp3
+compare_*.mp3
+probe_*.json
+
+# Streamlit runtime
+.streamlit/credentials.toml
+
+# Logs
+*.log
+streamlit.log
+
+# Test artifacts
+tests/output/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+desktop.ini

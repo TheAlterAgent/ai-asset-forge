@@ -1,0 +1,98 @@
+{
+  "project_name": "仙侠水云间",
+  "project_type": "RPG",
+  "style_guide": {
+    "art_style": "水墨仙侠 + 国风二次元融合",
+    "color_palette": ["#2B5F75", "#C4A35A", "#8B1A1A", "#F5F5DC"],
+    "mood_keywords": ["仙气飘渺", "江湖侠义", "水墨意境", "东方幻想"]
+  },
+  "resources": [
+    {
+      "id": "char_001",
+      "category": "character",
+      "name": "主角_水剑修_李墨寒",
+      "description": "水系剑修主角，性格沉稳内敛",
+      "assets": [
+        {
+          "modality": "image",
+          "subtype": "standing",
+          "filename": "char_001_standing",
+          "prompt": "A young male swordsman in flowing azure robes, water elemental aura surrounding him, holding a crystalline blue jian sword, standing pose with gentle breeze, calm and determined expression, Chinese ink wash painting meets anime style, teal and gold color scheme, highly detailed, 8k resolution, full body game character concept art, clean light background, professional illustration",
+          "prompt_zh": "年轻男性剑修，飘逸的蓝色长袍，周身环绕水元素灵气，手持水晶蓝色长剑，站姿带微风，沉稳坚毅的表情，水墨国风融合二次元风格，青金色调，高度精细，8K分辨率，全身游戏角色概念图，干净浅色背景，专业插画",
+          "specs": {"resolution": "1024x1024", "format": "png"}
+        },
+        {
+          "modality": "image",
+          "subtype": "battle",
+          "filename": "char_001_battle",
+          "prompt": "Dynamic action pose, male swordsman channeling water dragon technique, azure energy spiraling around blade, water splash effects, intense battle stance, Chinese fantasy style, dramatic lighting, splash art quality, game character illustration",
+          "prompt_zh": "动态战斗姿态，男性剑修施展水龙剑诀，蓝色能量环绕剑刃盘旋，水花飞溅特效，激烈战斗站姿，中式奇幻风格，戏剧性光影， splash art 品质，游戏角色插画",
+          "specs": {"resolution": "1024x1024", "format": "png"}
+        },
+        {
+          "modality": "video",
+          "subtype": "skill_fx",
+          "filename": "char_001_skill_water_dragon",
+          "prompt": "Cinematic slow-motion, young swordsman unleashing water dragon slash, massive azure dragon made of water energy emerging from blade, spiral water tornado, particle splash effects, dynamic camera orbit, 3 seconds, game VFX, high energy impact",
+          "prompt_zh": "电影级慢镜头，年轻剑修释放水龙斩，巨大的蓝色水能量巨龙从剑刃涌出，螺旋水龙卷，粒子飞溅特效，动态环绕镜头，3秒，游戏特效，高能量冲击",
+          "specs": {"resolution": "1080p", "duration": "3s", "format": "mp4"}
+        },
+        {
+          "modality": "audio",
+          "subtype": "attack_vo",
+          "filename": "char_001_vo_attack",
+          "prompt": "Young male voice, calm but fierce, speaking Chinese line with martial arts intensity, medium pace, clear pronunciation with slight echo, game voiceover quality",
+          "prompt_zh": "年轻男性声音，沉稳但凌厉，以武学气势说出中文台词，中等语速，发音清晰带轻微回响，游戏配音品质",
+          "specs": {"duration": "2s", "format": "mp3"}
+        }
+      ]
+    },
+    {
+      "id": "scene_001",
+      "category": "scene",
+      "name": "场景_云隐峰",
+      "description": "主角修炼的主场景，云海之上的仙山",
+      "assets": [
+        {
+          "modality": "image",
+          "subtype": "background",
+          "filename": "scene_001_bg",
+          "prompt": "Mystical mountain peak floating above sea of clouds, ancient Chinese pavilion with curved roofs, waterfall cascading into mist, cherry blossom trees, golden sunset light piercing through clouds, Chinese ink wash landscape style, atmospheric perspective, cinematic composition, environment concept art, 1920x1080",
+          "prompt_zh": "云海之上漂浮的神秘仙山，中式飞檐古亭，瀑布倾泻入迷雾，樱花树，金色夕阳穿透云层，水墨山水画风格，大气透视，电影级构图，环境概念图，1920x1080",
+          "specs": {"resolution": "1920x1080", "format": "png"}
+        },
+        {
+          "modality": "audio",
+          "subtype": "ambient",
+          "filename": "scene_001_ambient",
+          "prompt": "Peaceful mountain summit ambience, gentle wind through bamboo, distant waterfall, bird calls, subtle temple bell in far background, serene and meditative, seamless loop, game ambience",
+          "prompt_zh": "宁静的山巅环境音，竹林微风，远处瀑布，鸟鸣，远处若隐若现的寺庙钟声，宁静冥想感，无缝循环，游戏环境音",
+          "specs": {"duration": "60s", "format": "mp3"}
+        }
+      ]
+    },
+    {
+      "id": "bgm_001",
+      "category": "bgm",
+      "name": "BGM_主界面",
+      "description": "游戏主界面背景音乐",
+      "assets": [
+        {
+          "modality": "music",
+          "subtype": "main_menu",
+          "filename": "bgm_main_menu",
+          "prompt": "Ethereal Chinese fantasy theme, guzheng and erhu leading melody, soft bamboo flute harmonies, gentle taiko drums, flowing water-like rhythm, mysterious yet welcoming atmosphere, seamless loop, game soundtrack quality",
+          "prompt_zh": "空灵中式奇幻主题曲，古筝二胡主奏旋律，柔和竹笛和声，轻量太鼓，流水般节奏，神秘而亲切的氛围，无缝循环，游戏配乐品质",
+          "specs": {"duration": "120s", "format": "mp3"}
+        }
+      ]
+    }
+  ],
+  "total_estimate": {
+    "image_count": 3,
+    "video_count": 1,
+    "audio_count": 2,
+    "music_count": 1,
+    "text_count": 0
+  }
+}

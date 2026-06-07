@@ -1,0 +1,16 @@
+{
+  "api_base": "https://api.minimaxi.com",
+  "api_key": "YOUR_TOKEN_PLAN_KEY_HERE",
+  "group_id": "",
+  "payg_api_key": "YOUR_PAYG_KEY_HERE",
+  "models": {
+    "text": "MiniMax-M3",
+    "image": "image-01",
+    "video": "MiniMax-Hailuo-2.3",
+    "tts": "speech-2.6-hd",
+    "music": "music-2.6"
+  },
+  "output_dir": "../assets/projects",
+  "max_concurrent": 2,
+  "retry_times": 3
+}
