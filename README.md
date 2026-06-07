@@ -1,33 +1,92 @@
 # 🔥 AI Asset Forge
 
-> **From a game design document to a playable demo — no art skills required.**
+> **Your AI-generated game assets don't have to be one-shot. They evolve, branch, and grow — like a family tree.**
 >
-> AI Asset Forge turns your game idea into a generated, indexed, and reusable asset library using [M3](https://api.minimaxi.com) (text / image / video / TTS / music). Built for solo devs, hobbyists, and students who don't have an artist on the team.
+> AI Asset Forge is a generator + library + version graph for game assets, built for solo devs and artists who want AI assistance without losing creative control. Currently powered by MiniMax / M3, designed to support more model backends.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org)
 [![Streamlit](https://img.shields.io/badge/streamlit-1.58-red.svg)](https://streamlit.io)
 ![Status: Beta](https://img.shields.io/badge/status-beta-orange)
 
-[中文文档](README.zh.md) · [Quick Start](#-quick-start) · [Screenshots](#-screenshots) · [How it works](#-how-it-works)
+[中文文档](README.zh.md) · [Quick Start](#-quick-start) · [Roadmap](#-roadmap) · [The core idea](#-the-core-idea-assets-have-a-family-tree)
 
 ---
 
 ## 🎯 Who is this for?
 
-You're a programmer, a hobbyist, a student, or a small team. You have a game idea. You can write the logic. **You cannot draw, and you cannot afford a full art team.** You want a playable demo to pitch, test, or just play with.
+**You don't have an art team. You do have ideas.**
 
-AI Asset Forge is for you. Drop in a design doc, get back a full asset library: characters with voice lines, environments with ambient audio, skill icons, UI, BGM, and SFX. Searchable, deduplicated, and reusable across projects.
+Two kinds of users:
+
+1. **The programmer with no artist** — you can write the logic, you can't draw the sprites. You want a generator that turns design docs into assets, and a manager that keeps them organized across projects.
+2. **The artist who wants AI assistance** — you have the original skill, but you want to use AI to multiply yourself. You create one piece, then let AI generate variations; you pick what works, refine, branch. Over time your personal style evolves through a tree of derivatives.
+
+Both users end up with the same problem: **too many assets, no way to see which came from which, no way to manage the iterative mess**. AI Asset Forge is for both.
+
+---
 
 ## ✨ Features
 
-- **Plan from a design doc** — feed in a `.md`/`.txt` of your game idea, M3 turns it into a structured resource plan (characters, scenes, skills, UI, items, BGM, SFX…).
-- **Generate all modalities** — image, video, TTS voice lines, instrumental music, and text in one batch. Concurrency, retries, timeouts handled.
-- **Smart SFX trimming** — uses ffmpeg's `silencedetect` to find natural endings and `afade` for smooth tails. No abrupt cuts, no 5 MB clicks.
-- **Global library index** — SHA-256 deduplication, search by Chinese name / English filename / description / ID, thumbnail + inline audio/video preview.
-- **Cross-project reuse** — copy any resource into another project with one click. Build a personal asset library once, reuse forever.
-- **i18n** — English (default) and 中文 UI, switchable from the sidebar.
-- **CLI + GUI** — every UI page wraps a CLI script, so you can script it from cron / CI / your own pipeline.
+### Today (shipped)
+- **Generate from a design doc** — feed in a `.md`/`.txt`, M3 turns it into a structured resource plan (characters, scenes, skills, UI, items, BGM, SFX).
+- **All modalities** — image, video, TTS voice, instrumental music, and text, batched with retries and timeouts.
+- **Smart SFX trimming** — ffmpeg's `silencedetect` + `afade` for natural endings, no abrupt 5 MB clicks.
+- **Global library index** — SHA-256 dedup, search by Chinese name / English filename / description / ID, inline audio/video preview.
+- **Cross-project reuse** — copy any resource into another project with one click.
+- **i18n** — English (default) and 中文 UI.
+- **CLI + GUI** — every UI page wraps a CLI script, scriptable from CI/cron.
+
+### The core idea (see [Roadmap](#-roadmap) for status)
+- **Every asset has a family tree** — each asset knows its parent (the source image / prompt that produced it) and its children (the variants it spawned). The whole library is a navigable graph.
+- **Visual tree view** — pan/zoom, left/right or up/down, like a 族谱 (family tree). Click any node to see its ancestry, descendants, the exact prompt that produced it, and the original seed image.
+- **Fork, refine, share** — anyone in your team can branch off a popular asset, run it through AI again, upload the result back as a child node. The best variants accumulate.
+- **Mix AI + manual** — drop in your own PNG/JPG/MP3. It becomes a first-class node in the same graph, indistinguishable from AI-generated ones. No "AI vs hand-made" split.
+
+---
+
+## 🌱 The core idea: assets have a family tree
+
+AI generation is rarely one-shot. A good asset is **iterated on** — an original concept, refined with AI, refined again, branched into variants, picked, refined again.
+
+AI Asset Forge treats every asset as a node in an **evolution graph**:
+
+```
+                        ┌─────────────┐
+                        │ original    │  ← you painted it, or generated the first version
+                        │ hero_idle   │
+                        └──────┬──────┘
+              ┌──────────────────┼──────────────────┐
+              ▼                  ▼                  ▼
+       ┌──────────┐       ┌──────────┐       ┌──────────┐
+       │ battle-1 │       │ portrait │       │ idle-v2  │
+       │ damage   │       │ close-up │       │ new pose │
+       └────┬─────┘       └────┬─────┘       └──────────┘
+            │                  │
+       ┌────┴─────┐       ┌────┴─────┐
+       ▼          ▼       ▼          ▼
+   ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐
+   │ on-fire│ │ rainy  │ │ wounded│ │ smiling│
+   └────────┘ └────────┘ └────────┘ └────────┘
+     (fork)      (fork)     (fork)      (fork)
+```
+
+Every node carries:
+- The **asset file** (PNG, MP3, etc.)
+- The **prompt** that produced it (or, for hand-imported, the user's notes)
+- The **parent reference** (the asset it was derived from, if any)
+- **Generation metadata** (model, seed, settings, timestamp)
+- **Tags** for searchability
+
+You can:
+- Click any node to see its full ancestry (the chain of prompts/seed images that produced it).
+- See who in your team forked your work and how.
+- Branch off in multiple directions and pick the winner later.
+- Roll back to any previous version, like git history for art.
+
+The tree view will be pan/zoom, left/right or up/down, inspired by GitKraken's commit graph and traditional 族谱 charts.
+
+---
 
 ## 📸 Screenshots
 
@@ -49,6 +108,8 @@ AI Asset Forge is for you. Drop in a design doc, get back a full asset library: 
 ### 中文界面
 ![Chinese UI](docs/screenshots/06-zh-dashboard.png)
 
+> **Coming soon** (mockup): pan/zoom **family tree** view of asset evolution.
+
 ---
 
 ## 🚀 Quick Start
@@ -63,21 +124,21 @@ cd game-asset-pipeline
 pip install -r requirements.txt
 ```
 
-### 2. Configure API keys
+### 2. Configure a backend
 
 ```bash
 cp config/minimax.json.example config/minimax.json
 # edit config/minimax.json
 ```
 
-You need **one or both** of these from the [MiniMax platform](https://api.minimaxi.com):
+See [Backends](#-backends) for what to put here. Today there's one working backend: **MiniMax**. You'll need one or both of:
 
 | Key | Used by | Where to get it |
 |---|---|---|
-| `api_key` (Token Plan) | image / video / TTS / music (spends credits) | Subscription / Token Plan page |
-| `payg_api_key` (PAYG) | M3 text planning (spends tokens) | Pay-as-you-go page |
+| `api_key` (Token Plan) | image / video / TTS / music (spends credits) | [MiniMax Token Plan page](https://api.minimaxi.com) |
+| `payg_api_key` (PAYG) | M3 text planning (spends tokens) | MiniMax PAYG page |
 
-If you only have a Token Plan key, leave `payg_api_key` empty — M3 text calls will fallback to the Token Plan key.
+If you only have a Token Plan key, leave `payg_api_key` empty — M3 text calls will fall back to the Token Plan key.
 
 ### 3. Run the UI
 
@@ -92,28 +153,59 @@ On Windows you can also double-click `start.bat`.
 ### 4. Your first project, end-to-end
 
 1. **Doctor** page → click "Run doctor.py" to verify all 5 APIs are reachable.
-2. **Plan** page → click "Use project-root design.md" (or upload your own `.md`/`.txt`) → click "Run plan.py". Takes 4-8 minutes for M3 to plan.
+2. **Plan** page → click "Use project-root design.md" (or upload your own) → click "Run plan.py". Takes 4-8 minutes for M3 to plan.
 3. **Generate** page → select the project → check modalities to skip (e.g. `video` if your quota is low) → click "Run generate.py". Takes 5-10 minutes for the first run.
-4. **Library** page → search, filter, preview, reuse. Make another project and reuse assets from this one.
+4. **Library** page → search, filter, preview, reuse.
 
 ### 5. Just use the CLI
 
-Don't want the UI? The same scripts work standalone:
+The same scripts work standalone:
 
 ```bash
-# Diagnose
 python scripts/doctor.py
-
-# Plan
 python scripts/plan.py path/to/design.md
-
-# Generate
 python scripts/generate.py 你的项目名 --skip video
-
-# Rebuild index and search
 python scripts/index.py --rebuild
 python scripts/index.py --search "李墨寒"
 ```
+
+---
+
+## 🔌 Backends
+
+The generator is designed around **pluggable backends** so it can grow beyond a single model provider.
+
+| Backend | Status | What you get |
+|---|---|---|
+| **MiniMax** (M3 + Token Plan) | ✅ Working | Text planning (M3), image (`image-01`), video (`Hailuo-2.3`), TTS (`speech-2.6-hd`), music (`music-2.6`) |
+| **Stable Diffusion** (local) | 🔜 Planned | Image, img2img variations — privacy-friendly, free, offline |
+| **DALL-E / GPT-4o** | 🔜 Planned | Image generation |
+| **ComfyUI workflows** | 🔜 Planned | Custom pipelines you define |
+| **Local checkpoints** (SD / Flux / etc.) | 🔜 Planned | Any local model you can run |
+
+Want to add one? See [Contributing](#-contributing) — the backend interface is designed to be small.
+
+---
+
+## 🗂 Roadmap
+
+The **vision** is the family tree above. The current shipped scope is the foundation. Here's the order we're likely to build in:
+
+| Priority | Feature | Why |
+|---|---|---|
+| ✅ done | Multi-backend generation (MiniMax) | Foundation — assets must exist before they can have a tree |
+| ✅ done | Library index + search + reuse | Foundation — need a way to find assets |
+| ✅ done | Smart SFX trimming | Polish — better SFX = more useful tree |
+| 🔜 next | **Asset lineage graph** | The core idea — every asset gets a `parent_id`; CLI can show ancestry |
+| 🔜 next | **Manual asset import** | Drop in your own PNG/JPG/MP3, it becomes a first-class node |
+| 🔜 next | **Tree visualization** | Pan/zoom graph view in the UI |
+| ⏳ later | **Pluggable backends** | SD/DALL-E/ComfyUI/etc. |
+| ⏳ later | **Derivative generation from owned assets** | "Same character but on fire" using your existing asset as seed |
+| ⏳ later | **Asset version control** | Every save is a revision, roll back, diff, branch tags |
+| ⏳ later | **Team sharing** | Fork someone else's asset, contribute back |
+| 💭 idea | **Style transfer from your library** | Use your own finished assets to teach the AI your style |
+
+> Want to influence priority? Open an issue, or just use the tool and tell us what's missing.
 
 ---
 
@@ -121,21 +213,26 @@ python scripts/index.py --search "李墨寒"
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  design.md  ─►  M3  ─►  plan.json  ─►  APIs  ─►  assets/   │
-│                                       │                    │
-│                                       ▼                    │
-│                              index.json  ◄── scan           │
-│                                       │                    │
-│                                       ▼                    │
-│                          Streamlit UI (this app)           │
+│                                                              │
+│  design.md / prompt ─► AI backend ─► new asset (child of X)  │
+│                                           │                  │
+│                                           ▼                  │
+│              assets/  ◄──  version store  +  lineage DAG     │
+│                       │                                      │
+│                       ▼                                      │
+│                index.json + parent_id links                  │
+│                       │                                      │
+│                       ▼                                      │
+│             Streamlit UI  +  tree view  (planned)            │
+│                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 | Script | Job |
 |---|---|
-| `scripts/doctor.py` | One-shot health check for M3 / image / video / TTS / music |
-| `scripts/plan.py` | Send design doc to M3, get back structured `plan.json` |
-| `scripts/generate.py` | Read `plan.json`, batch-call APIs, download + rename + save |
+| `scripts/doctor.py` | One-shot health check for all backends |
+| `scripts/plan.py` | Send design doc to the text backend, get back structured `plan.json` |
+| `scripts/generate.py` | Read `plan.json`, batch-call APIs, download + save (with `parent_id` for lineage) |
 | `scripts/index.py` | Scan all projects, build searchable `index.json` |
 | `app.py` | Streamlit UI wrapping the above 4 scripts |
 | `i18n.py` | en/zh translation dictionary + `t()` helper |
@@ -180,7 +277,7 @@ game-asset-pipeline/             ← local directory name (the GitHub repo can b
 
 ## ⚙️ Configuration reference
 
-`config/minimax.json` fields:
+`config/minimax.json` fields (will become backend-specific in future versions):
 
 | Field | Required | Notes |
 |---|---|---|
@@ -236,8 +333,13 @@ The CLI scripts (`scripts/*.py`) print in Chinese by default. If you want them i
 
 ## 🤝 Contributing
 
-PRs welcome. A few things to know:
+PRs welcome. Especially welcome:
+- **New backends** — the backend interface is small, designed to be plugged into.
+- **Tree visualization** — d3 / vis.js / react-flow / your favorite.
+- **i18n translations** — anything beyond en/zh.
+- **Tests** for the existing scripts.
 
+Things to know:
 - **Don't commit your `config/minimax.json`** — it has real API keys. The `.gitignore` already excludes it.
 - **Add new i18n keys to BOTH `en` and `zh` in `i18n.py`**.
 - **The CLI scripts are the source of truth**. The Streamlit UI is a thin wrapper. Test changes via the CLI first.
