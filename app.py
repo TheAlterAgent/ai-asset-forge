@@ -1,5 +1,5 @@
 """
-M3 AIGC Game Asset Pipeline - Streamlit UI
+AI Asset Forge - Streamlit UI
 
 Usage:
     streamlit run app.py
@@ -27,8 +27,8 @@ CONFIG_PATH = BASE_DIR / "config" / "minimax.json"
 ENV = {**os.environ, "PYTHONIOENCODING": "utf-8"}
 
 st.set_page_config(
-    page_title="M3 Game Asset Pipeline",
-    page_icon="🎮",
+    page_title="AI Asset Forge",
+    page_icon="🔥",
     layout="wide",
 )
 

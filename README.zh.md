@@ -1,15 +1,23 @@
-# 🎮 M3 AIGC 游戏资产生成工作流
+# 🔥 AI Asset Forge
 
-> 一句话：用 [M3](https://api.minimaxi.com)（文本/图像/视频/TTS/音乐）+ [Token Plan](https://api.minimaxi.com) API，把一份游戏设计文档变成"可生成、可索引、可复用"的资源库，Streamlit 界面一键操作。
+> **从一份游戏设计文档，到一个可玩 demo——不需要美术。**
+>
+> AI Asset Forge 用 [M3](https://api.minimaxi.com)（文本/图像/视频/TTS/音乐）把你的游戏想法变成可生成、可索引、可复用的资产生成与管理工具。为没有美术团队的单人开发者、爱好者、学生设计。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org)
 [![Streamlit](https://img.shields.io/badge/streamlit-1.58-red.svg)](https://streamlit.io)
 ![状态: Beta](https://img.shields.io/badge/status-beta-orange)
 
-[English README](README.md) · [快速开始](#-快速开始) · [截图](#-截图) · [架构](#-架构)
+[English README](README.md) · [快速开始](#-快速开始) · [截图](#-截图) · [怎么工作的](#-怎么工作的)
 
 ---
+
+## 🎯 这是给谁用的？
+
+你是个程序员，或者爱好者、学生、小团队。你脑子里有游戏点子，逻辑能写出来。**但你不会画画，也请不起美术团队。** 你想做个 demo 去路演、测试、或者自己玩玩。
+
+AI Asset Forge 就是给你用的。丢一份设计文档进去，出来一整套资源库：角色（带语音）、场景（带环境音）、技能图标、UI、BGM、SFX。可搜索、去重、跨项目复用。
 
 ## ✨ 特性
 
@@ -17,15 +25,13 @@
 - **全模态批量生成** — 图像、视频、TTS 语音、器乐、文字一锅端，并发、重试、超时都处理好
 - **SFX 智能裁剪** — 用 ffmpeg 的 `silencedetect` 找自然结束点 + `afade` 加淡出，不硬切（依赖 `imageio-ffmpeg`）
 - **全局资源索引** — SHA256 去重，按中文名/英文文件名/描述/ID 搜索，缩略图 + 内嵌音频/视频预览
-- **跨项目复用** — 一键把任意资源复制到别的项目
+- **跨项目复用** — 一键把任意资源复制到别的项目。建一次个人素材库，到处用
 - **i18n** — 英文（默认）和中文，sidebar 一键切换
-- **CLI + GUI 都有** — 每个 UI 页面背后就是一个 CLI 脚本，可以塞 cron / CI
-
----
+- **CLI + GUI 都有** — 每个 UI 页面背后就是一个 CLI 脚本，可以塞 cron / CI / 自己的流水线
 
 ## 📸 截图
 
-### 概览
+### 概览 — 一眼看所有项目
 ![Dashboard](docs/screenshots/01-dashboard.png)
 
 ### 资源库 — 搜索、筛选、预览、复用
@@ -59,8 +65,6 @@ pip install -r requirements.txt
 
 ### 2. 配置 API Key
 
-复制模板并填上你的 key：
-
 ```bash
 cp config/minimax.json.example config/minimax.json
 # 编辑 config/minimax.json
@@ -88,7 +92,7 @@ streamlit run app.py
 1. **🔍 诊断** 页 → 点 "Run doctor.py"，确认 5 个 API 都能连通
 2. **🧠 规划** 页 → 点 "Use project-root design.md"（或上传自己的）→ 点 "Run plan.py"。M3 分析 4-8 分钟
 3. **⚙️ 生成** 页 → 选刚生成的项目 → 勾选要跳过的模态（比如 `video` 因为配额少）→ 点 "Run generate.py"。第一次跑 5-10 分钟
-4. **📚 资源库** 页 → 搜索、筛选、预览、复用
+4. **📚 资源库** 页 → 搜索、筛选、预览、复用。多开几个项目，资源互通
 
 ### 5. 只用 CLI
 
@@ -111,7 +115,7 @@ python scripts/index.py --search "李墨寒"
 
 ---
 
-## 🏗️ 架构
+## 🔧 怎么工作的
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -141,7 +145,7 @@ python scripts/index.py --search "李墨寒"
 ## 🗂️ 项目结构
 
 ```
-game-asset-pipeline/
+game-asset-pipeline/             ← 本地目录名（GitHub 仓库可以重命名）
 ├── app.py                       # Streamlit UI 入口
 ├── i18n.py                      # en / zh 翻译
 ├── start.bat                    # Windows 启动器（防卡邮箱引导）
@@ -203,6 +207,8 @@ UI 支持 **英文**（默认）和 **中文**，sidebar 一键切换。
 3. 在 `language_picker()` 里加标签
 
 漏翻译的 key 会回退到 key 本身，UI 上能直接看到该补的词。
+
+M3 规划 prompt 也是双语：`prompts/resource-planner.md`（中文，默认）和 `prompts/resource-planner.en.md`（英文）。改文件名切换，或改 `scripts/plan.py` 里的路径。
 
 CLI 脚本（`scripts/*.py`）默认打印中文。要英文直接改源码就行——每个脚本都很短。
 
