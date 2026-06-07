@@ -1,0 +1,53 @@
+[project]
+name = "ai-asset-forge"
+version = "0.1.0"
+description = "Generate, manage, and evolve game assets with AI. Built for solo devs and small teams who don't have an art team."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "AI Asset Forge Contributors" },
+]
+keywords = [
+    "ai", "game-assets", "game-development", "asset-pipeline",
+    "asset-management", "streamlit", "minimax", "m3",
+    "solo-developer", "no-artist-required",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "streamlit>=1.58.0",
+    "imageio-ffmpeg>=0.5",
+    "requests>=2.28",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/TheAlterAgent/ai-asset-forge"
+"Bug Tracker" = "https://github.com/TheAlterAgent/ai-asset-forge/issues"
+
+[project.scripts]
+# Future: ship console scripts here so `uv tool install .` works
+# ai-asset-forge = "app:main"
+
+[dependency-groups]
+# Dev-only deps — install with `uv sync --group dev`
+# Used for taking screenshots, testing, etc.
+dev = [
+    "playwright>=1.40",
+]

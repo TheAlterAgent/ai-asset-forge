@@ -116,13 +116,18 @@ AI Asset Forge 把每个资源都当成**演化图**里的一个节点：
 
 ### 1. 安装
 
-需要 **Python 3.10+**。
+需要 **[uv](https://docs.astral.sh/uv/)**（现代 Python 包管理器）。Windows 上 `winget install astral-sh.uv`，macOS/Linux 见 [uv 安装文档](https://docs.astral.sh/uv/getting-started/installation/)。
 
 ```bash
-git clone <your-fork-url>
-cd game-asset-pipeline
-pip install -r requirements.txt
+git clone https://github.com/TheAlterAgent/ai-asset-forge.git
+cd ai-asset-forge
+uv sync                # 创建 .venv/ 并从 uv.lock 装齐所有依赖
 ```
+
+> **为什么用 `uv` 而不是 `pip install -r requirements.txt`？**
+> - 项目用的是 `pyproject.toml` + `uv.lock`（不是手写的 `requirements.txt`）
+> - `uv` 比 pip 快 10-100x，能管 Python 版本，拒绝污染系统 Python
+> - **AI agent / 贡献者：见 [AGENTS.md](AGENTS.md)——规则不容商量**
 
 ### 2. 配置后端
 
@@ -143,10 +148,10 @@ cp config/minimax.json.example config/minimax.json
 ### 3. 启动 UI
 
 ```bash
-streamlit run app.py
+uv run streamlit run app.py
 ```
 
-浏览器自动打开 `http://localhost:8501`（默认绑 127.0.0.1，看 [`.streamlit/config.toml`](.streamlit/config.toml)）。Windows 也可以双击 `start.bat`。
+浏览器自动打开 `http://localhost:8501`（默认绑 127.0.0.1，看 [`.streamlit/config.toml`](.streamlit/config.toml)）。Windows 也可以双击 `start.bat`（用系统 Python，详见 [AGENTS.md](AGENTS.md) 推荐的 uv 流程）。
 
 ### 4. 第一个项目，端到端走一遍
 
@@ -157,12 +162,14 @@ streamlit run app.py
 
 ### 5. 只用 CLI
 
+不要 UI 的话，同一套脚本也能直接跑——**永远用 `uv run`**：
+
 ```bash
-python scripts/doctor.py
-python scripts/plan.py path/to/design.md
-python scripts/generate.py 你的项目名 --skip video
-python scripts/index.py --rebuild
-python scripts/index.py --search "李墨寒"
+uv run python scripts/doctor.py
+uv run python scripts/plan.py path/to/design.md
+uv run python scripts/generate.py 你的项目名 --skip video
+uv run python scripts/index.py --rebuild
+uv run python scripts/index.py --search "李墨寒"
 ```
 
 ---
@@ -243,8 +250,11 @@ python scripts/index.py --search "李墨寒"
 game-asset-pipeline/             ← 本地目录名（GitHub 仓库可以重命名）
 ├── app.py                       # Streamlit UI 入口
 ├── i18n.py                      # en / zh 翻译
+├── AGENTS.md                    # AI 编码助手的规则（先看这个！）
 ├── start.bat                    # Windows 启动器（防卡邮箱引导）
-├── requirements.txt
+├── pyproject.toml               # 依赖清单
+├── uv.lock                      # 锁版本（提交进 git！）
+├── .venv/                       # 本地 venv（gitignore 掉）—— `uv sync` 创建
 ├── LICENSE                      # MIT
 ├── README.md / README.zh.md     # 本文件
 ├── .streamlit/
@@ -319,7 +329,7 @@ CLI 脚本（`scripts/*.py`）默认打印中文。要英文直接改源码就�
 
 **`generate.py` 报 `invalid params, lyrics is required`** → 不该再出现了，我们总是传 `is_instrumental: true`。碰到了开个 issue。
 
-**Streamlit 报 `ModuleNotFoundError: No module named 'streamlit'`** → `pip install -r requirements.txt`。
+**Streamlit 报 `ModuleNotFoundError: No module named 'streamlit'`** → `uv sync`（不是 `pip install`）。
 
 **资源库里音频播不了** → 打开浏览器控制台看报错。文件是按字节流嵌入的，MIME type 走 magic number 探测，文件坏了会显示 "Audio playback failed: …"。
 

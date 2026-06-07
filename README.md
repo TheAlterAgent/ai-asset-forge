@@ -116,13 +116,18 @@ The tree view will be pan/zoom, left/right or up/down, inspired by GitKraken's c
 
 ### 1. Install
 
-Requires **Python 3.10+**.
+Requires **[uv](https://docs.astral.sh/uv/)** (the modern Python package manager). Install it via `winget` on Windows, or `brew install uv` / `curl install` on macOS/Linux — see [uv install docs](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```bash
-git clone <your-fork-url>
-cd game-asset-pipeline
-pip install -r requirements.txt
+git clone https://github.com/TheAlterAgent/ai-asset-forge.git
+cd ai-asset-forge
+uv sync                # creates .venv/ and installs everything from uv.lock
 ```
+
+> **Why `uv` and not `pip install -r requirements.txt`?**
+> - This project uses `pyproject.toml` + `uv.lock` (not a hand-rolled `requirements.txt`).
+> - `uv` is 10-100x faster than pip, manages Python versions, and refuses to pollute your system Python.
+> - **AI agents / contributors: see [AGENTS.md](AGENTS.md) — the rules are non-negotiable.**
 
 ### 2. Configure a backend
 
@@ -143,30 +148,30 @@ If you only have a Token Plan key, leave `payg_api_key` empty — M3 text calls 
 ### 3. Run the UI
 
 ```bash
-streamlit run app.py
+uv run streamlit run app.py
 ```
 
 Opens `http://localhost:8501` in your browser. (Bound to `127.0.0.1` by default — see [`.streamlit/config.toml`](.streamlit/config.toml).)
 
-On Windows you can also double-click `start.bat`.
+On Windows you can also double-click `start.bat` (which uses the system Python — see [AGENTS.md](AGENTS.md) for the recommended `uv` flow).
 
 ### 4. Your first project, end-to-end
 
 1. **Doctor** page → click "Run doctor.py" to verify all 5 APIs are reachable.
 2. **Plan** page → click "Use project-root design.md" (or upload your own) → click "Run plan.py". Takes 4-8 minutes for M3 to plan.
 3. **Generate** page → select the project → check modalities to skip (e.g. `video` if your quota is low) → click "Run generate.py". Takes 5-10 minutes for the first run.
-4. **Library** page → search, filter, preview, reuse.
+4. **Library** page → search, filter, preview, reuse. Make another project and reuse assets from this one.
 
 ### 5. Just use the CLI
 
-The same scripts work standalone:
+Don't want the UI? The same scripts work standalone — always with `uv run`:
 
 ```bash
-python scripts/doctor.py
-python scripts/plan.py path/to/design.md
-python scripts/generate.py 你的项目名 --skip video
-python scripts/index.py --rebuild
-python scripts/index.py --search "李墨寒"
+uv run python scripts/doctor.py
+uv run python scripts/plan.py path/to/design.md
+uv run python scripts/generate.py 你的项目名 --skip video
+uv run python scripts/index.py --rebuild
+uv run python scripts/index.py --search "李墨寒"
 ```
 
 ---
@@ -247,8 +252,11 @@ See [Project structure](#-project-structure) for the full layout.
 game-asset-pipeline/             ← local directory name (the GitHub repo can be renamed)
 ├── app.py                       # Streamlit UI entry
 ├── i18n.py                      # en / zh translations
+├── AGENTS.md                    # rules for AI coding agents (read this first!)
 ├── start.bat                    # Windows launcher (headless-safe)
-├── requirements.txt
+├── pyproject.toml               # dependency manifest
+├── uv.lock                      # locked versions (commit this!)
+├── .venv/                       # local venv (gitignored) — created by `uv sync`
 ├── LICENSE                      # MIT
 ├── README.md / README.zh.md     # this file
 ├── .streamlit/
@@ -323,7 +331,7 @@ The CLI scripts (`scripts/*.py`) print in Chinese by default. If you want them i
 
 **`generate.py` says `invalid params, lyrics is required`** → Shouldn't happen anymore; we always send `is_instrumental: true`. If it does, open an issue.
 
-**Streamlit shows `ModuleNotFoundError: No module named 'streamlit'`** → `pip install -r requirements.txt`.
+**Streamlit shows `ModuleNotFoundError: No module named 'streamlit'`** → `uv sync` (not `pip install`).
 
 **Audio in the Library doesn't play** → Check the browser console. The file is read as bytes and embedded — the MIME type is detected from magic numbers, so a corrupted file should show "Audio playback failed: …".
 
